@@ -1,0 +1,122 @@
+{% load static %}
+{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin | Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta charset="UTF-8">
+
+    <!-- Styles -->
+    <link type="text/css" rel="stylesheet" href="{% static 'admin/assets/plugins/materialize/css/materialize.min.css' %}"/>
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="{% static 'admin/assets/plugins/metrojs/MetroJs.min.css' %}" rel="stylesheet">
+    <link href="{% static 'admin/assets/plugins/weather-icons-master/css/weather-icons.min.css' %}" rel="stylesheet">
+
+    <!-- Theme Styles -->
+    <link href="{% static 'admin/assets/css/alpha.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'admin/assets/css/custom.css' %}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    {% include 'header.html' %}
+    {% include 'sidebar.html' %}
+
+    <main class="mn-inner">
+        <div class="middle-content">
+            <div class="row no-m-t no-m-b">
+                <div class="col s12 m12 l4">
+                    <div class="card stats-card">
+                        <div class="card-content">
+                            <span class="card-title">Total Registered Employees</span>
+                            <span class="stats-counter"><span class="counter">{{ empcount }}</span></span>
+                        </div>
+                        <div id="sparkline-bar"></div>
+                    </div>
+                </div>
+                <div class="col s12 m12 l4">
+                    <div class="card stats-card">
+                        <div class="card-content">
+                            <span class="card-title">Listed Departments</span>
+                            <span class="stats-counter"><span class="counter">{{ deptcount }}</span></span>
+                        </div>
+                        <div id="sparkline-line"></div>
+                    </div>
+                </div>
+                <div class="col s12 m12 l4">
+                    <div class="card stats-card">
+                        <div class="card-content">
+                            <span class="card-title">Listed Leave Types</span>
+                            <span class="stats-counter"><span class="counter">{{ ltcount }}</span></span>
+                        </div>
+                        <div class="progress stats-card-progress">
+                            <div class="determinate" style="width: 70%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row no-m-t no-m-b">
+                <div class="col s12 m12 l12">
+                    <div class="card invoices-card">
+                        <div class="card-content">
+                            <span class="card-title">Latest Leave Applications</span>
+                            <table id="example" class="display responsive-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th width="200">Employee Name</th>
+                                        <th width="120">Leave Type</th>
+                                        <th width="180">Posting Date</th>
+                                        <th>Status</th>
+                                        <th align="center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in leaves %}
+                                    <tr>
+                                        <td><b>{{ forloop.counter }}</b></td>
+                                        <td><a href="{% url 'edit_employee' i.emp.user.id %}" target="_blank">{{ i.emp.user.first_name }} {{ i.emp.user.last_name }} ({{ i.emp.empid }})</a></td>
+                                        <td>{{ i.leavetype }}</td>
+                                        <td>{{ i.postingdate }}</td>
+                                        <td>
+                                            {% if i.status == "Accept" %}
+                                            <span style="color: green">Approved</span>
+                                            {% elif i.status == "Reject" %}
+                                            <span style="color: red">Not Approved</span>
+                                            {% else %}
+                                            <span style="color: blue">Waiting for approval</span>
+                                            {% endif %}
+                                        </td>
+                                        <td><a href="{% url 'leave_details' i.id %}" class="waves-effect waves-light btn blue m-b-xs">View Details</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Javascripts -->
+    <script src="{% static 'admin/assets/plugins/jquery/jquery-2.2.0.min.js' %}"></script>
+    <script src="{% static 'admin/assets/plugins/materialize/js/materialize.min.js' %}"></script>
+    <script src="{% static 'admin/assets/plugins/material-preloader/js/materialPreloader.min.js' %}"></script>
+    <script src="{% static 'admin/assets/plugins/jquery-blockui/jquery.blockui.js' %}"></script>
+    <script src="{% static 'admin/assets/plugins/waypoints/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'admin/assets/plugins/counter-up-master/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'admin/assets/plugins/jquery-sparkline/jquery.sparkline.min.js' %}"></script>
+    <script src="{% static 'admin/assets/plugins/chart.js/chart.min.js' %}"></script>
+    <script src="{% static 'admin/assets/plugins/flot/jquery.flot.min.js' %}"></script>
+    <script src="{% static 'admin/assets/plugins/flot/jquery.flot.time.min.js' %}"></script>
+    <script src="{% static 'admin/assets/plugins/flot/jquery.flot.symbol.min.js' %}"></script>
+    <script src="{% static 'admin/assets/plugins/flot/jquery.flot.resize.min.js' %}"></script>
+    <script src="{% static 'admin/assets/plugins/flot/jquery.flot.tooltip.min.js' %}"></script>
+    <script src="{% static 'admin/assets/plugins/curvedlines/curvedLines.js' %}"></script>
+    <script src="{% static 'admin/assets/plugins/peity/jquery.peity.min.js' %}"></script>
+    <script src="{% static 'admin/assets/js/alpha.min.js' %}"></script>
+    <script src="{% static 'admin/assets/js/pages/dashboard.js' %}"></script>
+</body>
+</html>
+{% endblock %}
